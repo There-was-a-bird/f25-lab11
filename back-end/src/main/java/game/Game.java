@@ -36,6 +36,17 @@ public class Game {
         return this.board;
     }
 
+    public Game undo() {
+        if (history.isEmpty()) {
+            return this;
+        }
+
+        List<Game> newHistory = new ArrayList<>(this.history);
+        Game previous = newHistory.remove(newHistory.size() - 1);
+        return new Game(previous.board, previous.player, newHistory);
+    }
+
+
     public Player getPlayer() {
         return this.player;
     }

@@ -65,6 +65,16 @@ class App extends React.Component<Props, GameState> {
     }
   }
 
+  undo = async () => {
+    const response = await fetch('/undo');
+    const json = await response.json();
+    this.setState({
+      cells: json['cells'],
+      instructions: json['instructions']
+    });
+  }
+
+
   createCell(cell: Cell, index: number): React.ReactNode {
     if (cell.playable)
       /**
@@ -124,7 +134,7 @@ class App extends React.Component<Props, GameState> {
         <div id="bottombar">
           <button onClick={/* get the function, not call the function */this.newGame}>New Game</button>
           {/* Exercise: implement Undo function */}
-          <button>Undo</button>
+          <button onClick={this.undo}>Undo</button>
         </div>
       </div>
     );
