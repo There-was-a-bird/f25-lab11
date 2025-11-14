@@ -5,14 +5,18 @@ import java.util.Arrays;
 public class GameState {
 
     private final Cell[] cells;
+    private final String instructions;
 
-    private GameState(Cell[] cells) {
+    private GameState(Cell[] cells, String instructions) {
         this.cells = cells;
+        this.instructions = instructions;
+        
     }
 
     public static GameState forGame(Game game) {
         Cell[] cells = getCells(game);
-        return new GameState(cells);
+        String instructions = computeInstructions(game);
+        return new GameState(cells, instructions);
     }
 
     public Cell[] getCells() {
@@ -23,11 +27,18 @@ public class GameState {
      * toString() of GameState will return the string representing
      * the GameState in JSON format.
      */
-    @Override
     public String toString() {
         return """
-                { "cells": %s}
-                """.formatted(Arrays.toString(this.cells));
+                { "cells": %s, "instructions": "%s" }
+                """.formatted(Arrays.toString(this.cells), this.instructions);
+    }
+
+    private static String computeInstructions(Game game) {
+        Player winner = game.getWinner();
+        if (winner != null) {
+            return "Player " + winner.value + " wins!";
+        }
+        return "Player " + game.getPlayer().value + "'s turn";
     }
 
     private static Cell[] getCells(Game game) {
